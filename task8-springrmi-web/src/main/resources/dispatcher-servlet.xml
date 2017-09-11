@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+    <!-- 扫描@Controller, @Service注解,告诉前端控制器应该去哪个包下扫描 -->
+    <context:component-scan base-package="com.putaoteng.task8"></context:component-scan>
+
+    <!-- 使用注解驱动,有了注解驱动,spring才能使用识别注解,默认采用最新版本的注解驱动-->
+    <!-- 注册了Spring MVC分发请求到控制器所必须的
+    DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapter实例 ,有了这两个实例,才可以使用注解
+    没有它,@ResponseBody @Parameter等注解都无法使用-->
+    <mvc:annotation-driven/>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/u/*"/>
+            <bean class="com.putaoteng.task8.utils.authentication.AutoLoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <!-- 默认的视图解析 -->
+    <mvc:default-servlet-handler/>
+
+    <!-- 配置视图解析器,设置jsp文件的前缀和后缀 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:order="2">
+        <property name="prefix" value="/WEB-INF/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!-- tiles框架相关配置 -->
+    <bean id="tilesConfigurer"
+          class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>classpath:tiles.xml</value>
+            </list>
+        </property>
+        <property name="checkRefresh" value="true"></property>
+    </bean>
+
+    <!-- url视图解析器 ,该解析器会将视图名称翻译成URL并通过RequestDispatcher处理请求后渲染视图-->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver"
+          p:order="1">
+    </bean>
+
+    <!-- spring上傳文件類 -->
+   <!--&lt;!&ndash; <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />-->
+
+   <!-- <aop:config>
+    <aop:aspect id="myAspectController" ref="logAdvice">
+        <aop:pointcut expression="execution(* com.putaoteng.task8.controller.*Controller.*(..))"
+                      id="controller"/>
+        <aop:around method="around" pointcut-ref="controller"/>
+    </aop:aspect>
+</aop:config>-->
+</beans>

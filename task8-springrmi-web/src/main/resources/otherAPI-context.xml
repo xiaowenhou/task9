@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+
+    <!-- 阿里云短信模块 -->
+    <bean id="aliSMS" class="com.putaoteng.task8.utils.other.SendShortMessage">
+        <property name="accessKeyId" value="LTAInw2uvA9Iiz1u"></property>
+        <property name="accessKeySecret" value="ZvMYRfBDViHZV5d6Gb20ivESime6XG"></property>
+        <property name="signName" value="张鑫"></property>
+        <property name="templateParam" value="SMS_89710090"></property>
+    </bean>
+
+    <!-- sendcloud发送模版邮件模块 -->
+    <bean id="sendMailTemplate" class="com.putaoteng.task8.utils.other.SendMailTemplate">
+        <property name="apiUser" value="xiaowenhou_test_xCM6Uu"></property>
+        <property name="apiKey" value="Wnlc3a8k4ywvUhxz"></property>
+        <property name="template" value="test_template_congratulations"></property>
+    </bean>
+
+    <!-- sendcloud发送自定义邮件模块 -->
+    <bean id="sendMailContent" class="com.putaoteng.task8.utils.other.SendMailContent">
+        <property name="apiUser" value="xiaowenhou_test_xCM6Uu"></property>
+        <property name="apiKey" value="Wnlc3a8k4ywvUhxz"></property>
+        <property name="verificateUrl" value="http://120.77.169.243:8086/task7/verification"></property>
+    </bean>
+
+    <!-- 七牛云存储上传文件模块 -->
+    <bean id="qiniuStorage" class="com.putaoteng.task8.utils.other.QiniuStorage">
+        <property name="accessKey" value="e8byTKXyt6dfOXrX99iSRpsULtxRwAUK75fpi1xS"></property>
+        <property name="secretKey" value="voi-hN-bZErW5Ld1e6LlsUiehiz7Yx4dL1z3s1ja"></property>
+        <property name="endpoint" value="http://ovjf6a85f.bkt.clouddn.com"></property>
+        <property name="bucket" value="xiaowenhou"></property>
+    </bean>
+
+    <!--阿里云存储上传文件模块-->
+    <bean id="aliStorage" class="com.putaoteng.task8.utils.other.AliStorage">
+        <property name="accessKeyId" value="LTAInw2uvA9Iiz1u"></property>
+        <property name="accessKeySecret" value="ZvMYRfBDViHZV5d6Gb20ivESime6XG"></property>
+        <property name="endpoint" value="http://oss-cn-shenzhen.aliyuncs.com"></property>
+        <property name="bucketName" value="xiaowenhou"></property>
+    </bean>
+
+    <!--云存储模块,可以通过配置该模块实现文件上传至不同的云存储中-->
+    <bean id="storage" class="com.putaoteng.task8.utils.other.Storage">
+        <property name="aliStorage" ref="aliStorage"></property>
+        <property name="qiniuStorage" ref="qiniuStorage"></property>
+        <!--选择使用哪种云存储方式,该值只有两个, qiniu 和 ali-->
+        <property name="choice" value="ali"></property>
+    </bean>
+
+    <!--迁移模块,可以通过配置该模块实现数据从一个云存储迁移到另一个云存储中-->
+    <bean id="transfer" class="com.putaoteng.task8.utils.other.Transfer">
+        <property name="aliStorage" ref="aliStorage"></property>
+        <property name="qiniuStorage" ref="qiniuStorage"></property>
+        <!--迁移之后是否需要删除原来的存储空间的内容,yes为是,no为不是-->
+        <property name="isDelete" value="no"></property>
+        <!--选择从七牛迁移到阿里(qiniu-to-ali)还是从阿里迁移到七牛(ali-to-qiniu)-->
+        <property name="toOther" value="ali-to-qiniu"></property>
+    </bean>
+</beans>

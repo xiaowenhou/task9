@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.putaoteng.task8.dao.VerificationDao">
+	<resultMap id="verificationResultMap" type="com.putaoteng.task8.model.Verification">
+		<result property="id" column="id" />
+		<result property="phoneNumber" column="phone_number" />
+		<result property="code" column="phone_code" />
+		<result property="email" column="email" />
+		<result property="emailVerification" column="email_verification" />
+		<result property="createAt" column="create_at" />
+		<result property="updateAt" column="update_at" />
+		<result property="createBy" column="create_by" />
+		<result property="updateBy" column="update_by" />
+	</resultMap>
+
+	<!-- =====================================Insert=============================== -->
+	<insert id="save" useGeneratedKeys="true" keyProperty="id"
+		parameterType="Verification">
+		INSERT INTO verification(
+		id,phone_number,phone_code,email,email_verification,create_at,update_at,create_by,update_by)
+		VALUES (
+		#{id},#{phoneNumber},#{code},#{email},#{emailVerification},#{createAt},#{updateAt},#{createBy},#{updateBy})
+	</insert>
+
+	<insert id="saveBatch" useGeneratedKeys="true" parameterType="list">
+		INSERT INTO verification(
+		id,phone_number,phone_code,email,email_verification,create_at,update_at,create_by,update_by)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.id},#{item.phoneNumber},#{item.code},#{item.email},#{item.emailVerification},#{item.createAt},#{item.updateAt},#{item.createBy},#{item.updateBy})
+		</foreach>
+	</insert>
+
+	<!-- ============================= UPDATE ============================= -->
+	<update id="update" parameterType="Verification">
+		UPDATE verification
+		<set>
+			id=#{id},
+			phone_number=#{phoneNumber},
+			phone_code=#{code},
+			email=#{email},
+			email_verification=#{emailVerification},
+			create_at=#{createAt},
+			update_at=#{updateAt},
+			create_by=#{createBy},
+			update_by=#{updateBy},
+		</set>
+		WHERE id=#{id}
+	</update>
+
+	<update id="updateIgnoreNull" parameterType="Verification">
+		UPDATE verification
+		<set>
+			<if test="id!= null">id=#{id},</if>
+			<if test="phoneNumber!= null">phone_number=#{phoneNumber},</if>
+			<if test="code!= null">phone_code=#{code},</if>
+			<if test="email!= null">email=#{email},</if>
+			<if test="emailVerification!= null">email_verification=#{emailVerification},</if>
+			<if test="createAt!= null">create_at=#{createAt},</if>
+			<if test="updateAt!= null">update_at=#{updateAt},</if>
+			<if test="createBy!= null">create_by=#{createBy},</if>
+			<if test="updateBy!= null">update_by=#{updateBy},</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+
+	<update id="updateBatch" parameterType="List">
+		<foreach collection="list" item="item" index="index"
+			separator=";">
+			UPDATE verification
+			<set>
+				id=#{item.id},
+				phone_number=#{item.phoneNumber},
+				phone_code=#{item.code},
+				email=#{item.email},
+				email_verification=#{item.emailVerification},
+				create_at=#{item.createAt},
+				update_at=#{item.updateAt},
+				create_by=#{item.createBy},
+				update_by=#{item.updateBy},
+			</set>
+			WHERE id=#{item.id}
+		</foreach>
+	</update>
+
+	<!-- ============================= DELETE ============================= -->
+	<delete id="delete">
+		DELETE FROM verification
+		WHERE id=#{id}
+	</delete>
+
+	<delete id="deleteBatch">
+		DELETE FROM verification
+		WHERE
+		<foreach collection="list" item="item" index="index" open="("
+			separator="OR" close=")">
+			(id=#{item.id} )
+		</foreach>
+	</delete>
+
+	<delete id="deleteByPK">
+		DELETE FROM verification
+		WHERE id=#{id}
+	</delete>
+
+	<delete id="deleteAll">
+		DELETE FROM verification
+	</delete>
+
+	<!-- ============================= SELECT ============================= -->
+	<select id="count" resultType="java.lang.Long">
+		SELECT COUNT(1) FROM verification
+	</select>
+
+	<select id="findByPK" resultMap="verificationResultMap">
+		SELECT * FROM verification
+		WHERE
+		id=#{id}
+	</select>
+
+	<select id="findByPhoneNumber" resultMap="verificationResultMap">
+		SELECT * FROM
+		verification
+		WHERE
+		phone_number=#{phoneNumber}
+	</select>
+
+	<select id="findByEmail" resultMap="verificationResultMap">
+		SELECT * FROM verification
+		WHERE
+		email=#{email}
+	</select>
+	
+	<select id="findByCreateAt" resultMap="verificationResultMap">
+		SELECT * FROM verification
+		WHERE
+		create_at=#{createAt}
+	</select>
+	
+	<select id="findAll" resultMap="verificationResultMap">
+		SELECT * FROM verification
+	</select>
+
+	<!-- <select id="find" resultType="Book"> SELECT * FROM book <where> <if 
+		test="bookId!= null"> AND book_id = #{bookId} </if> <if test="title!= null"> 
+		AND title like #{title} </if> <if test="minprice!= null"> AND price >= #{minprice} 
+		</if> <if test="maxprice!= null"> <![CDATA[ AND price < #{maxprice} ]]> </if> 
+		<if test="publishTime!= null"> AND publish_time = #{publishTime} </if> <if 
+		test="blobContent!= null"> AND blob_content = #{blobContent} </if> <if test="textContent!= 
+		null"> AND text_content = #{textContent} </if> </where> </select> -->
+</mapper>

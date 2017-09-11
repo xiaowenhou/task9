@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca-j/spring/200810"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/sca  http://www.osoa.org/xmlns/sca/1.0/spring-sca.xsd ">
+
+	<context:component-scan base-package="com.putaoteng.task8"></context:component-scan>
+	<!-- 加載配置文件 -->
+	<bean id="propertyConfigurer"
+		  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:db.properties</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 數據庫c3p0連接池 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		  destroy-method="close">
+		<!-- <property name="driverClassName" value="${jdbc.driverClassName}"/> -->
+		<property name="jdbcUrl" value="${jdbc.url}"/>
+		<property name="driverClass" value="${jdbc.driverClass}"/>
+		<property name="user" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<property name="maxPoolSize" value="${jdbc.maxPoolSize}"></property>
+		<property name="minPoolSize" value="${jdbc.minPoolSize}"></property>
+		<property name="initialPoolSize" value="${jdbc.initialPoolSize}"></property>
+		<property name="maxIdleTime" value="${jdbc.maxIdleTime}"></property>
+		<property name="acquireIncrement" value="${jdbc.acquireIncrement}"></property>
+		<property name="maxStatements" value="${jdbc.maxStatements}"></property>
+		<property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}"></property>
+	</bean>
+	<!-- 創建mhybatis的sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:sqlMapConfig.xml"/>
+	</bean>
+	<!-- 自動掃描映射關係,生成sqlSession并鏈接 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.putaoteng.task8.dao"/>
+	</bean>
+
+
+	<sca:service name="UserService" type="com.putaoteng.task8.server.UserDaoServiceRemote"
+				 target="userDaoService"/>
+	<sca:service name="StudentService" type="com.putaoteng.task8.server.StudentDaoServiceRemote"
+				 target="studentDaoService"/>
+	<!--&lt;!&ndash;spring rmi 服务端配置&ndash;&gt;
+	&lt;!&ndash;配置StudentDaoService&ndash;&gt;
+	<bean id="rmiServiceStudent" class="org.springframework.remoting.rmi.RmiServiceExporter">
+		&lt;!&ndash;将远程接口实现类对象设置到RMI服务中&ndash;&gt;
+		<property name="service" ref="studentDaoService"></property>
+		&lt;!&ndash;设置RMI服务名,为客户端会依据此服务名来获取远程接口实现类&ndash;&gt;
+		<property name="serviceName" value="Student"></property>
+		&lt;!&ndash;将远程接口设置为RMI服务接口&ndash;&gt;
+		<property name="serviceInterface" value="com.putaoteng.task8.server.StudentDaoServiceRemote"></property>
+		&lt;!&ndash;为RMI服务端远程对象注册表设置端口号&ndash;&gt;
+		<property name="registryPort" value="12315"></property>
+		&lt;!&ndash;设置通信端口号&ndash;&gt;
+		<property name="servicePort" value="12315"></property>
+		&lt;!&ndash;为RMI服务端远程对象设置主机名&ndash;&gt;
+		&lt;!&ndash;<property name="registryHost" value="120.77.169.243"></property>&ndash;&gt;
+	</bean>
+
+	&lt;!&ndash;配置UserDaoService&ndash;&gt;
+	<bean id="rmiServiceUser" class="org.springframework.remoting.rmi.RmiServiceExporter">
+		<property name="service" ref="userDaoService"></property>
+		<property name="serviceName" value="User"></property>
+		<property name="serviceInterface" value="com.putaoteng.task8.server.UserDaoServiceRemote"></property>
+		<property name="registryPort" value="12315"></property>
+		<property name="servicePort" value="12315"></property>
+		&lt;!&ndash;外网ip&ndash;&gt;
+		&lt;!&ndash;<property name="registryHost" value="120.77.169.243"></property>&ndash;&gt;
+	</bean>
+
+	&lt;!&ndash;配置VerificationDaoService&ndash;&gt;
+	<bean id="rmiServiceVerification" class="org.springframework.remoting.rmi.RmiServiceExporter">
+		<property name="service" ref="verificationDaoService"></property>
+		<property name="serviceName" value="Verification"></property>
+		<property name="serviceInterface" value="com.putaoteng.task8.server.VerificationDaoServiceRemote"></property>
+		<property name="registryPort" value="12315"></property>
+		<property name="servicePort" value="12315"></property>
+		&lt;!&ndash;<property name="registryHost" value="120.77.169.243"></property>&ndash;&gt;
+	</bean>-->
+
+
+	<!-- spring切面配置 -->
+	<!--<context:component-scan base-package="com.putaoteng.task8.utils"/>
+	<aop:config>
+		<aop:aspect id="myAspectDao" ref="logAdvice">
+			<aop:pointcut expression="execution(* com.putaoteng.task8.dao.*Dao.*(..))"
+						  id="dao"/>
+			<aop:around method="around" pointcut-ref="dao"/>
+		</aop:aspect>
+	</aop:config>-->
+</beans>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean name="memcachedClientBuilder" class="net.rubyeye.xmemcached.XMemcachedClientBuilder">
+		<!-- XMemcachedClientBuilder有两个参数,第一个是服务器的ip和端口号,第二个是权重值 -->
+		<constructor-arg>
+			<list>
+				<!-- <bean class="java.net.InetSocketAddress">
+					<constructor-arg>
+						<value>120.77.169.243</value>
+					</constructor-arg>
+					<constructor-arg>
+						<value>9006</value>
+					</constructor-arg>
+				</bean> -->
+				<bean class="java.net.InetSocketAddress">
+					<constructor-arg>
+						<value>120.77.169.243</value>
+					</constructor-arg>
+					<constructor-arg>
+						<value>8096</value>
+					</constructor-arg>
+				</bean>
+			</list>
+		</constructor-arg>
+		<constructor-arg>
+			<list>
+				<!-- <value>1</value> -->
+				<value>1</value>
+			</list>
+		</constructor-arg>
+		<!-- 连接池大小,默认为1 -->
+		<property name="connectionPoolSize" value="1"></property>
+		<!-- 协议gongchang,默认是TextCommandFactory,这里用二进制协议工厂,还有KestrelCommandFactory -->
+		<property name="commandFactory">
+			<bean class="net.rubyeye.xmemcached.command.BinaryCommandFactory"></bean>
+		</property>
+		<!-- 分布式策略,默认是ArraySessionLocator(默认),求余算法,以下配置为一致性哈希算法,该算法在扩容时影响较小 -->
+		<property name="sessionLocator">
+			<bean class="net.rubyeye.xmemcached.impl.KetamaMemcachedSessionLocator"></bean>
+		</property>
+		<!-- 序列化通信编码 -->
+		<property name="transcoder">
+			<bean class="net.rubyeye.xmemcached.transcoders.SerializingTranscoder" />
+		</property>
+		<!-- loBuffer分配器,默认为以下 -->
+		<property name="bufferAllocator">
+			<bean class="net.rubyeye.xmemcached.buffer.SimpleBufferAllocator"></bean>
+		</property>
+	</bean>
+	<!-- 使用memcacheClientBuilder工厂创建memcachedCLient客户端 -->
+	<bean name="memcachedClient" factory-bean="memcachedClientBuilder"
+		factory-method="build" destroy-method="shutdown" />
+</beans>

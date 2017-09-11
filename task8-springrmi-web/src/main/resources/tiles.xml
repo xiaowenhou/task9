@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="defaultTemplate" template="/WEB-INF/tiles/classic.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/tiles/header.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/tiles/menu.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
+	</definition>
+
+	<!-- index页面 -->
+	<definition name="index" extends="defaultTemplate">
+		<put-attribute name="title" value="选择页面" />
+		<put-attribute name="body" value="/WEB-INF/index.jsp" />
+	</definition>
+
+	<!-- operations页面 -->
+	<definition name="operations" extends="defaultTemplate">
+		<put-attribute name="title" value="操作页面" />
+		<put-attribute name="body" value="/WEB-INF/operations.jsp"></put-attribute>
+	</definition>
+
+	<!-- List页面 -->
+	<definition name="studentList" extends="defaultTemplate">
+		<put-attribute name="title" value="学生列表" />
+		<put-attribute name="body" value="/WEB-INF/studentList.jsp" />
+	</definition>
+	
+	<!-- student页面 -->
+	<definition name="student" extends="defaultTemplate">
+		<put-attribute name="title" value="学生" />
+		<put-attribute name="body" value="/WEB-INF/student.jsp"></put-attribute>
+	</definition>
+
+	<!-- addStudent页面 -->
+	<definition name="addStudent" extends="defaultTemplate">
+		<put-attribute name="title" value="数据录入" />
+		<put-attribute name="body" value="/WEB-INF/addStudent.jsp"></put-attribute>
+	</definition>
+
+	<!-- editStudent页面 -->
+	<definition name="editStudent" extends="defaultTemplate">
+		<put-attribute name="title" value="数据更新" />
+		<put-attribute name="body" value="/WEB-INF/editStudent.jsp"></put-attribute>
+	</definition>
+
+	<!-- success页面 -->
+	<definition name="success" extends="defaultTemplate">
+		<put-attribute name="title" value="成功" />
+		<put-attribute name="body" value="/WEB-INF/success.jsp"></put-attribute>
+	</definition>
+
+	<!-- failed页面 -->
+	<definition name="failed" extends="defaultTemplate">
+		<put-attribute name="title" value="失败" />
+		<put-attribute name="body" value="/WEB-INF/failed.jsp"></put-attribute>
+	</definition>
+
+	<!-- registration页面 -->
+	<definition name="registration" extends="defaultTemplate">
+		<put-attribute name="title" value="注册" />
+		<put-attribute name="body" value="/WEB-INF/registration.jsp"></put-attribute>
+	</definition>
+	
+	<!-- login页面 -->
+	<definition name="login" extends="defaultTemplate">
+		<put-attribute name="title" value="登陆" />
+		<put-attribute name="body" value="/WEB-INF/login.jsp"></put-attribute>
+	</definition>
+
+	<!-- 退出页面 -->
+	<definition name="bye" extends="defaultTemplate">
+		<put-attribute name="title" value="再见" />
+		<put-attribute name="body" value="/WEB-INF/bye.jsp"></put-attribute>
+	</definition>
+
+	<!-- 注册后欢迎页面 -->
+	<definition name="welcome" extends="defaultTemplate">
+		<put-attribute name="title" value="欢迎"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/welcome.jsp"></put-attribute>
+	</definition>
+
+</tiles-definitions>
